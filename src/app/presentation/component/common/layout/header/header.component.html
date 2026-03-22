@@ -1,0 +1,39 @@
+<div class="card border-none shadow-none">
+  <p-menubar [model]="items" class="border-none bg-transparent">
+    <ng-template #start>
+      <div class="flex items-center gap-3 px-2">
+        <p-button
+          icon="pi pi-bars"
+          [text]="true"
+          severity="secondary"
+          (onClick)="onMenuClick.emit()"
+          class="lg:hidden"
+        />
+
+        <span class="text-xl font-black tracking-tighter text-primary flex items-center gap-1">
+          STEVEENCUES <span class="font-light text-muted-color">INSIGHTS</span>
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template #end>
+      <div class="flex items-center gap-3 pr-2">
+        <p-button
+          icon="pi pi-github"
+          severity="secondary"
+          [rounded]="true"
+          [text]="true"
+          class="hover:bg-surface-100 dark:hover:bg-surface-800"
+        />
+
+        <p-button
+          label="Acceder"
+          icon="pi pi-user"
+          [rounded]="true"
+          size="small"
+          class="shadow-sm"
+        />
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>
