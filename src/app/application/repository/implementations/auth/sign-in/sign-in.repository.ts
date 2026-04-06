@@ -45,10 +45,16 @@ export class SignInRepository implements ISignInRepository {
   public signIn(params: SignInParametersEntity): Observable<SignInModel> {
     return this.adapter.signIn(params).pipe(
       map((response: SignInResponseEntity) => this.mapper.toModel(response)),
-      switchMap((model) => this.getTokens().pipe(map(() => model))),
+      switchMap((model: SignInModel) => {
+        const isSignedIn = model.getRawOutput()?.isSignedIn ?? false;
+        if (isSignedIn) {
+          return this.getTokens().pipe(map(() => model));
+        } else {
+          return from([model]);
+        }
+      }),
       catchError((error: unknown) => {
         const message = error instanceof Error ? error.message : 'Unknown error in sign in';
-
         return throwError(() => new Error(message));
       }),
     );
