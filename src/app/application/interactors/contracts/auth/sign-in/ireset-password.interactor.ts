@@ -10,10 +10,10 @@ import type { ResetPasswordInput } from 'aws-amplify/auth';
  */
 export abstract class IResetPasswordInteractor {
   /**
-   * @method resendCode
-   * @description Ejecuta el reenvio del codigo.
+   * @method resendPassword
+   * @description Ejecuta el reenvio de la contraseña.
    * @param {ResetPasswordInput} params Datos de entrada.
    * @returns {Observable<ResetPasswordModel>}
    */
-  abstract resendCode(params: ResetPasswordInput): Observable<ResetPasswordModel>;
+  abstract resendPassword(params: ResetPasswordInput): Observable<ResetPasswordModel>;
 }

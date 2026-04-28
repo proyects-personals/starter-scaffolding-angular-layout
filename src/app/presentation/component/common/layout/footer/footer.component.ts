@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UrlEnum } from '@/app/domain';
 import { Divider } from 'primeng/divider';
 import { Button } from 'primeng/button';
-import { Tooltip } from 'primeng/tooltip';
 
 /**
  * @interface SocialNetwork
@@ -26,7 +25,7 @@ interface SocialNetwork {
  */
 @Component({
   selector: 'app-footer',
-  imports: [Divider, Button, Tooltip],
+  imports: [Divider, Button],
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {

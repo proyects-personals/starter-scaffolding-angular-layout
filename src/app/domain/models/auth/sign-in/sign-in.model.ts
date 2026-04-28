@@ -2,74 +2,121 @@ import { SignUpStepEnum } from '@/app';
 import type { SignInOutput } from 'aws-amplify/auth';
 
 /**
+ * @type SignInStepType
+ * @description
+ * Tipo de paso de autenticación retornado por AWS Amplify.
+ */
+type SignInStepType = SignInOutput['nextStep']['signInStep'];
+
+/**
  * @interface SignInPlainObject
- * @description Estructura de datos plana para el modelo de inicio de sesión.
+ * @description
+ * Representación serializable del modelo de autenticación.
  */
 export interface SignInPlainObject {
   success: boolean;
-  nextStep: string;
+  nextStep: SignInStepType | null;
   rawOutput: SignInOutput;
 }
 
 /**
  * @class SignInModel
- * @version 1.1.0
- * @author Steveen Ordoñez
  * @description
- * Modelo de dominio que representa el resultado de un intento de inicio de sesión.
+ * Modelo de dominio que encapsula el resultado del flujo de inicio de sesión.
+ * Permite interpretar el siguiente paso del proceso de autenticación
+ * sin acoplar la lógica directamente a AWS Amplify.
+ *
+ * @version 2.0.0
  */
 export class SignInModel {
+  /**
+   * @constructor
+   * @param success indica si el login fue exitoso
+   * @param nextStep siguiente paso del flujo de autenticación
+   * @param rawOutput respuesta original de AWS Amplify
+   */
   constructor(
     private readonly success: boolean,
-    private readonly nextStep: string,
+    private readonly nextStep: SignInStepType | null,
     private readonly rawOutput: SignInOutput,
   ) {}
 
-  /** @returns {boolean} Indica si el inicio de sesión fue exitoso. */
+  /**
+   * @method isSuccess
+   * @description Indica si el inicio de sesión fue exitoso.
+   */
   public isSuccess(): boolean {
     return this.success;
   }
 
-  /** @returns {string} El siguiente paso requerido por el flujo de autenticación. */
-  public getNextStep(): string {
+  /**
+   * @method getNextStep
+   * @description Retorna el siguiente paso del flujo de autenticación.
+   */
+  public getNextStep(): SignInStepType | null {
     return this.nextStep;
   }
 
-  /** @returns {SignInOutput} La respuesta completa original de AWS Amplify. */
+  /**
+   * @method getRawOutput
+   * @description Retorna la respuesta original de AWS Amplify.
+   */
   public getRawOutput(): SignInOutput {
     return this.rawOutput;
   }
 
-  /** @description Verifica si se requiere cambio de contraseña obligatorio. */
+  /**
+   * @method requiereCambioPassword
+   * @description Indica si el usuario debe cambiar su contraseña.
+   */
   public requiereCambioPassword(): boolean {
-    const step: string = SignUpStepEnum.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED;
-    return this.nextStep === step;
+    return this.isStep(SignUpStepEnum.CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED);
   }
 
-  /** @description Verifica si el flujo requiere validación por MFA (SMS o TOTP). */
+  /**
+   * @method requiereMFA
+   * @description Indica si el flujo requiere autenticación multifactor (MFA).
+   */
   public requiereMFA(): boolean {
-    const smsStep: string = SignUpStepEnum.CONFIRM_SIGN_IN_WITH_SMS_CODE;
-    const totpStep: string = SignUpStepEnum.CONFIRM_SIGN_IN_WITH_TOTP_CODE;
-
-    return this.nextStep === smsStep || this.nextStep === totpStep;
+    return (
+      this.isStep(SignUpStepEnum.CONFIRM_SIGN_IN_WITH_SMS_CODE) ||
+      this.isStep(SignUpStepEnum.CONFIRM_SIGN_IN_WITH_TOTP_CODE) ||
+      this.isStep(SignUpStepEnum.CONFIRM_SIGN_IN_WITH_EMAIL_CODE)
+    );
   }
 
-  /** @description Indica si el siguiente paso es confirmar el registro. */
-  public getNextConfirmSignUpStep(): boolean {
-    const step: string = SignUpStepEnum.CONFIRM_SIGN_UP;
-    return this.nextStep === step;
+  /**
+   * @method requiereConfirmSignUp
+   * @description Indica si el usuario debe confirmar su registro.
+   */
+  public requiereConfirmSignUp(): boolean {
+    return this.isStep(SignUpStepEnum.CONFIRM_SIGN_UP);
   }
 
-  /** @description Indica si el proceso de autenticación ha finalizado con éxito. */
-  public getNextDone(): boolean {
-    const step: string = SignUpStepEnum.DONE;
+  /**
+   * @method isDone
+   * @description Indica si el flujo de autenticación ha finalizado correctamente.
+   */
+  public isDone(): boolean {
+    return this.isStep(SignUpStepEnum.DONE);
+  }
+
+  /**
+   * @method isStep
+   * @description
+   * Compara de forma segura el siguiente paso actual con un paso esperado.
+   *
+   * @param step paso a comparar
+   */
+  private isStep(step: SignInStepType | SignUpStepEnum): boolean {
+    if (!this.nextStep) return false;
+
     return this.nextStep === step;
   }
 
   /**
    * @method toPlainObject
-   * @description Convierte el modelo a un objeto literal de JavaScript.
-   * @returns {SignInPlainObject} Objeto plano con la información de la sesión.
+   * @description Convierte el modelo a objeto plano para logs o persistencia.
    */
   public toPlainObject(): SignInPlainObject {
     return {

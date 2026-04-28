@@ -1,4 +1,5 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import type { ApplicationConfig } from '@angular/core';
+import { provideAppInitializer } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from '@/app/presentation/app.routes';
 import { providePrimeNG } from 'primeng/config';
@@ -10,46 +11,44 @@ import amplifyconfig from '../../amplifyconfiguration.json';
 import { DataIoc } from '../infrestructure/data-ioc';
 
 /**
- * @constant resourceConfig
- * @description
- * Almacena la configuración parseada de AWS Amplify.
- * Crucial para habilitar Auth (Cognito) y API (AppSync).
+ * @function initializeTheme
+ * @description Configura la detección automática del tema del SO y sincroniza la clase '.dark'.
  */
-const resourceConfig = parseAmplifyConfig(amplifyconfig);
+function initializeTheme(): void {
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-/**
- * Configuración global de AWS Amplify.
- * Se inicializa antes del arranque de Angular para garantizar disponibilidad de servicios.
- */
+  const updateTheme = (isDark: boolean): void => {
+    document.documentElement.classList.toggle('dark', isDark);
+  };
+
+  updateTheme(darkQuery.matches);
+  darkQuery.addEventListener('change', (e) => updateTheme(e.matches));
+}
+
+const resourceConfig = parseAmplifyConfig(amplifyconfig);
 Amplify.configure(resourceConfig);
 
 /**
  * @constant appConfig
- * @version 1.1.0
- * @author Steveen Ordoñez
- * @type {ApplicationConfig}
- * @description
- * Punto de entrada único para la configuración de la aplicación.
- * Orquestra el Router, PrimeNG, Manejo de Errores y la Inyección de Dependencias (IoC).
+ * @description Configuración centralizada utilizando el nuevo inicializador de aplicaciones.
  */
 export const appConfig: ApplicationConfig = {
-  /**
-   * @property {Provider[]} providers
-   * @description
-   * Registro de servicios globales y lógica de negocio:
-   * 1. **Core Services**: Enrutamiento y listeners de errores.
-   * 2. **UI Design System**: PrimeNG con temática Aura.
-   * 3. **Clean Architecture IoC**: Inyección masiva de interactores y casos de uso.
-   */
   providers: [
-    provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideAppInitializer(() => {
+      initializeTheme();
+    }),
+
     providePrimeNG({
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: '.dark',
+        },
       },
       ripple: true,
     }),
+
     ...DataIoc.providers,
   ],
 };

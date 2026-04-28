@@ -24,7 +24,7 @@ export class ResetPasswordInteractor implements IResetPasswordInteractor {
    * @param {ResetPasswordInput} params Datos de entrada.
    * @returns {Observable<ResetPasswordModel>}
    */
-  public resendCode(params: ResetPasswordInput): Observable<ResetPasswordModel> {
+  public resendPassword(params: ResetPasswordInput): Observable<ResetPasswordModel> {
     return this.useCase.execute(params).pipe(
       catchError((error: unknown) => {
         const message = error instanceof Error ? error.message : 'Unknown error in reset password';

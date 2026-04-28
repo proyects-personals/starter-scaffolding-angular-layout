@@ -1,6 +1,6 @@
 import type { Observable } from 'rxjs';
 import { from, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import type { SignInOutput } from 'aws-amplify/auth';
 import { signIn } from 'aws-amplify/auth';
 

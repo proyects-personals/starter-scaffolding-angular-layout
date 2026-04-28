@@ -12,7 +12,6 @@ import { APP_ROUTES } from '@domain';
  */
 @Component({
   selector: 'app-not-found-screen',
-  standalone: true,
   imports: [],
   templateUrl: './not-found-screen.component.html',
 })

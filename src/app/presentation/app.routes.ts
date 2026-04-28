@@ -1,35 +1,53 @@
 import type { Routes } from '@angular/router';
-import { APP_ROUTES } from '@/app/domain';
 import { LayoutComponent } from '@/app/presentation/component';
 import { OnboardingRoutes } from './pages/onboarding/onboarding.routes';
+import { ModulesRoutes } from './pages/modules/modules.routes';
+import { privateGuard, publicGuard } from '../application';
 
-/**
- * @constant routes
- * @description Configuración raíz. Define el Layout y carga el módulo de onboarding.
- */
 export const routes: Routes = [
+  /**
+   * ONBOARDING (solo si NO está autenticado)
+   */
   {
-    path: '',
+    path: 'onboarding',
+    canMatch: [publicGuard],
     component: LayoutComponent,
     children: [
       {
-        path: APP_ROUTES.ONBOARDING,
-        loadChildren: () => Promise.resolve(OnboardingRoutes),
-      },
-      {
         path: '',
-        redirectTo: APP_ROUTES.ONBOARDING,
-        pathMatch: 'full',
+        loadChildren: () => Promise.resolve(OnboardingRoutes),
       },
     ],
   },
+
+  /**
+   * APP PRIVADA (solo autenticados)
+   */
   {
-    path: APP_ROUTES.NOT_FOUND,
-    loadComponent: () => 
-      import('@/app/presentation').then((m) => m.NotFoundScreenComponent),
+    path: '',
+    canMatch: [privateGuard],
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => Promise.resolve(ModulesRoutes),
+      },
+    ],
   },
+
+  /**
+   * 404 REAL
+   */
+  {
+    path: 'not-found',
+    loadComponent: () => import('@/app/presentation').then((m) => m.NotFoundScreenComponent),
+  },
+
+  /**
+   * fallback final
+   */
   {
     path: '**',
-    redirectTo: APP_ROUTES.NOT_FOUND,
+    redirectTo: 'not-found',
   },
 ];

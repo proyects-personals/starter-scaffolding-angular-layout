@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import type { CanActivateFn } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthFlowNavigatorService } from '../../services';
 
 /**
@@ -14,6 +15,5 @@ export const authStepGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate(['/onboarding/auth/sign-in']);
-  return false;
+  return router.createUrlTree(['/onboarding/auth/sign-in']);
 };

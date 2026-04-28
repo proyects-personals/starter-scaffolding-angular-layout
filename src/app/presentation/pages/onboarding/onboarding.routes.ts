@@ -12,8 +12,7 @@ export const OnboardingRoutes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => 
-          import('@/app/presentation').then((m) => m.WelcomeComponent),
+        loadComponent: () => import('@/app/presentation').then((m) => m.WelcomeComponent),
       },
       {
         path: APP_ROUTES.AUTH,

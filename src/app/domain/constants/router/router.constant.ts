@@ -14,7 +14,9 @@ export const APP_ROUTES = {
   REGISTER: 'registro',
   HOME: 'home',
   NOT_FOUND: '404',
-  SIGN_IN:'sing-in',
-  CHANGE_PASSWORD: "change-password",
-  AUTH: 'auth'
+  SIGN_IN: 'sign-in',
+  CHANGE_PASSWORD: 'change-password',
+  REQUIRED_PASSWORD: 'required-password',
+  AUTH: 'auth',
+  APP: 'app',
 };

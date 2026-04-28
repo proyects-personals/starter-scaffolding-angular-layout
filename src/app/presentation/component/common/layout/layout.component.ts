@@ -26,9 +26,9 @@ export class LayoutComponent {
    * @type {WritableSignal<boolean>}
    * @description Indica si el usuario actual ha iniciado sesión.
    * Determina si se permite la interacción con elementos protegidos como el Sidebar.
-   * @default true
+   * @default false
    */
-  public readonly isAuthenticated: WritableSignal<boolean> = signal<boolean>(true);
+  public readonly isAuthenticated: WritableSignal<boolean> = signal<boolean>(false);
 
   /**
    * @readonly

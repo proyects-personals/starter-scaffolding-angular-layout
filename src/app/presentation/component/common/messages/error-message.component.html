@@ -1,0 +1,13 @@
+@if (message()) {
+  <p-message
+    severity="error"
+    [closable]="true"
+    styleClass="w-full !bg-red-950/40 !border !border-red-800 !text-red-200 !rounded-xl"
+    (onClose)="onClose()"
+  >
+    <div class="flex items-center gap-2">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>{{ message() }}</span>
+    </div>
+  </p-message>
+}
