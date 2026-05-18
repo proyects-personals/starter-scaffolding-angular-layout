@@ -1,7 +1,12 @@
 {
-  "name": "starter-scaffolding-angular",
+ "name": "starter-scaffolding-angular",
   "version": "0.0.0",
   "type": "module",
+  "private": true,
+  "packageManager": "npm@11.10.1",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -17,8 +22,6 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-  "private": true,
-  "packageManager": "npm@11.10.1",
   "dependencies": {
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
