@@ -2,11 +2,13 @@
   class="sticky top-0 z-50 w-full border-b border-surface-200 dark:border-surface-700 bg-surface-0/80 dark:bg-surface-900/80 backdrop-blur-md"
 >
   <div class="mx-auto px-4 py-2 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+    <!-- 🔹 Logo -->
     <div class="flex items-center gap-3">
       <a routerLink="/" class="flex items-center gap-2">
         <span class="text-xl font-extrabold tracking-tighter text-surface-950 dark:text-white">
           STEVEENCUES
         </span>
+
         <span
           class="hidden sm:inline-flex text-primary text-xs font-semibold uppercase bg-primary/10 px-2 py-0.5 rounded-full"
         >
@@ -15,22 +17,32 @@
       </a>
     </div>
 
+    <!-- 🔹 Menú -->
     <nav class="hidden lg:flex justify-center">
       <p-menubar [model]="items" />
     </nav>
 
-    <div class="flex justify-end items-center">
-      @if (isSignInRoute()) {
-        <p-button
-          label="Bienvenido"
-          [text]="true"
-          size="small"
-          (onClick)="goToHome()"
-          class="animate-fade-in"
-        />
+    <!-- 🔹 Usuario / Auth -->
+    <div class="flex justify-end items-center gap-3">
+      @if (isAuthenticated()) {
+        <div class="flex items-center gap-3 animate-fade-in">
+          <div
+            class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold"
+          >
+            {{ email()?.charAt(0)?.toUpperCase() }}
+          </div>
+          <div class="hidden sm:flex flex-col leading-tight">
+            <span class="text-sm font-medium text-surface-900 dark:text-white">
+              {{ email() }}
+            </span>
+            <span class="text-xs text-surface-500"> Usuario autenticado </span>
+          </div>
+          <p-button icon="pi pi-home" [text]="true" size="small" (onClick)="goToHome()" />
+        </div>
       } @else {
         <p-button
           label="Sign in"
+          icon="pi pi-sign-in"
           [text]="true"
           size="small"
           (onClick)="goToLogin()"

@@ -5,9 +5,6 @@ import { ModulesRoutes } from './pages/modules/modules.routes';
 import { privateGuard, publicGuard } from '../application';
 
 export const routes: Routes = [
-  /**
-   * ONBOARDING (solo si NO está autenticado)
-   */
   {
     path: 'onboarding',
     canMatch: [publicGuard],
@@ -19,10 +16,6 @@ export const routes: Routes = [
       },
     ],
   },
-
-  /**
-   * APP PRIVADA (solo autenticados)
-   */
   {
     path: '',
     canMatch: [privateGuard],
@@ -34,18 +27,10 @@ export const routes: Routes = [
       },
     ],
   },
-
-  /**
-   * 404 REAL
-   */
   {
     path: 'not-found',
     loadComponent: () => import('@/app/presentation').then((m) => m.NotFoundScreenComponent),
   },
-
-  /**
-   * fallback final
-   */
   {
     path: '**',
     redirectTo: 'not-found',

@@ -1,8 +1,18 @@
-import { Component } from '@angular/core';
+import { UserAttributesService } from '@/app/application';
+import { Component, effect, inject } from '@angular/core';
 
 @Component({
   selector: 'app-home-component',
-  imports: [],
   templateUrl: './home-component.html',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  readonly #userAttributesService = inject(UserAttributesService);
+
+  constructor() {
+    void this.#userAttributesService.loadUserAttributes();
+
+    effect(() => {
+      this.#userAttributesService.attributes();
+    });
+  }
+}

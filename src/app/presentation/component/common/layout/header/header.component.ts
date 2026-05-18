@@ -1,5 +1,5 @@
 import type { OnInit } from '@angular/core';
-import { Component, inject, signal, output } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
@@ -7,58 +7,93 @@ import type { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
 import { Button } from 'primeng/button';
 import { APP_ROUTES } from '@/app/domain';
+import { UserAttributesService } from '@/app/application';
 
 /**
  * @component HeaderComponent
  * @description
- * Componente de cabecera con navegación principal y control de sidebar.
- * Maneja estado de ruta activa para UI reactiva.
+ * Componente de cabecera principal de la aplicación.
  *
- * @version 1.0.2
+ * Responsabilidades:
+ * - Renderizar navegación principal
+ * - Detectar ruta actual (login)
+ * - Mostrar estado de autenticación del usuario
+ * - Exponer acciones de navegación
+ *
+ * @version 2.0.0
  */
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [Menubar, Button, RouterLink],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
+  /**
+   * @private router
+   * @description Servicio de navegación Angular Router
+   */
   private readonly router = inject(Router);
 
   /**
+   * @private userService
+   * @description Servicio de atributos del usuario
+   */
+  private readonly userService = inject(UserAttributesService);
+
+  /**
    * @signal isSignInRoute
-   * @description Indica si el usuario está en la ruta de login.
+   * @description Indica si la ruta actual es login
    */
   public readonly isSignInRoute = signal(false);
 
   /**
-   * @output menuClicked
-   * @description Evento emitido al abrir menú lateral.
+   * @signal user
+   * @description Atributos del usuario autenticado
    */
-  public readonly menuClicked = output<void>();
+  public readonly user = this.userService.attributes;
+
+  /**
+   * @signal email
+   * @description Email del usuario autenticado
+   */
+  public readonly email = this.userService.email;
+
+  /**
+   * @signal isAuthenticated
+   * @description Indica si existe usuario autenticado
+   */
+  public readonly isAuthenticated = computed(() => !!this.user());
 
   /**
    * @property items
-   * @description Items del menú principal.
+   * @description Items del menú principal
    */
   public items: MenuItem[] = [];
 
+  /**
+   * @constructor
+   * @description Inicializa listeners y carga de usuario
+   */
   constructor() {
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(),
-      )
-      .subscribe((event) => {
-        const signInPath = `/${APP_ROUTES.ONBOARDING}/${APP_ROUTES.AUTH}/${APP_ROUTES.SIGN_IN}`;
-
-        this.isSignInRoute.set(event.urlAfterRedirects === signInPath);
-      });
+    this.#listenRouteChanges();
+    this.#loadUser();
   }
 
   /**
    * @method ngOnInit
+   * @description Inicializa el menú principal
    */
   public ngOnInit(): void {
+    this.#initMenu();
+  }
+
+  /**
+   * @method #initMenu
+   * @description Configura los items del menú principal
+   * @private
+   */
+  #initMenu(): void {
     this.items = [
       { label: 'Inicio', icon: 'pi pi-home', routerLink: '/' },
       { label: 'Proyectos', icon: 'pi pi-briefcase' },
@@ -67,31 +102,55 @@ export class HeaderComponent implements OnInit {
   }
 
   /**
-   * @method handleMenuClick
+   * @method #listenRouteChanges
+   * @description Escucha cambios de navegación para detectar login
+   * @private
    */
-  public handleMenuClick(): void {
-    this.menuClicked.emit();
+  #listenRouteChanges(): void {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe((event) => {
+        const signInPath = this.#getSignInPath();
+
+        this.isSignInRoute.set(event.urlAfterRedirects === signInPath);
+      });
+  }
+
+  /**
+   * @method #loadUser
+   * @description Dispara la carga de atributos del usuario
+   * @private
+   */
+  #loadUser(): void {
+    void this.userService.loadUserAttributes();
+  }
+
+  /**
+   * @method #getSignInPath
+   * @description Construye la ruta de login
+   * @returns string
+   * @private
+   */
+  #getSignInPath(): string {
+    return `/${APP_ROUTES.ONBOARDING}/${APP_ROUTES.AUTH}/${APP_ROUTES.SIGN_IN}`;
   }
 
   /**
    * @method goToLogin
-   * @description Navega a login de forma silenciosa.
+   * @description Navega a login
    */
   public goToLogin(): void {
-    const path = `/${APP_ROUTES.ONBOARDING}/${APP_ROUTES.AUTH}/${APP_ROUTES.SIGN_IN}`;
-
-    this.router.navigate([path]).catch(() => {
-      /* no-op */
-    });
+    void this.router.navigate([this.#getSignInPath()]);
   }
 
   /**
    * @method goToHome
-   * @description Navega a home de forma silenciosa.
+   * @description Navega a home
    */
   public goToHome(): void {
-    this.router.navigate(['/onboarding']).catch(() => {
-      /* no-op */
-    });
+    void this.router.navigate(['/onboarding']);
   }
 }
