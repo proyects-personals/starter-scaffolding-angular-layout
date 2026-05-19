@@ -14,8 +14,14 @@ backend:
         - echo "NPM version:"
         - npm -v
 
+        # Faster npm installs
+        - npm config set fund false
+        - npm config set audit false
+        - npm config set progress false
+
+        # Install dependencies using cache
         - echo "Installing backend dependencies..."
-        - npm install --cache .npm --prefer-offline
+        - npm install --cache .npm --prefer-offline --no-audit --no-fund
 
     build:
       commands:
@@ -23,7 +29,7 @@ backend:
         - echo "DEPLOYING AMPLIFY GEN 2 BACKEND"
         - echo "======================================="
 
-        # Validate backend types
+        # Type validation without failing pipeline
         - npx ampx sandbox --once --outputs-format json || true
 
         # Deploy backend resources
@@ -35,6 +41,7 @@ backend:
       - node_modules/**/*
       - .amplify/**/*
       - .angular/cache/**/*
+      - ~/.npm/**/*
 
 frontend:
   phases:
@@ -50,12 +57,20 @@ frontend:
         - echo "NPM version:"
         - npm -v
 
-        # Clean install dependencies
+        # Faster npm behavior
+        - npm config set fund false
+        - npm config set audit false
+        - npm config set progress false
+
+        # Faster dependency installation
         - echo "Installing frontend dependencies..."
-        - npm install --cache .npm --prefer-offline
+        - npm install --cache .npm --prefer-offline --no-audit --no-fund
 
     build:
       commands:
+        # Angular cache optimization
+        - export NG_BUILD_CACHE=1
+
         # Lint validation
         - echo "Running ESLint..."
         - npm run lint
@@ -64,11 +79,11 @@ frontend:
         - echo "Checking Prettier formatting..."
         - npm run format:check
 
-        # Unit testing
+        # Faster Jest CI execution
         - echo "Running Jest tests..."
-        - npm run test:coverage -- --watch=false --ci --passWithNoTests
+        - npm run test:coverage -- --watch=false --ci --maxWorkers=50% --passWithNoTests
 
-        # Angular production build
+        # Optimized Angular production build
         - echo "Building Angular production application..."
         - npm run build -- --configuration production
 
@@ -80,23 +95,43 @@ frontend:
   cache:
     paths:
       - .npm/**/*
+      - ~/.npm/**/*
       - node_modules/**/*
       - .angular/cache/**/*
       - .vite/**/*
+      - dist/**/*
 
   customHeaders:
-    # Static assets
+    # JS assets
     - pattern: '**/*.js'
       headers:
         - key: 'Cache-Control'
           value: 'public, max-age=31536000, immutable'
 
+    # CSS assets
     - pattern: '**/*.css'
       headers:
         - key: 'Cache-Control'
           value: 'public, max-age=31536000, immutable'
 
+    # Fonts
     - pattern: '**/*.woff2'
+      headers:
+        - key: 'Cache-Control'
+          value: 'public, max-age=31536000, immutable'
+
+    # Images
+    - pattern: '**/*.png'
+      headers:
+        - key: 'Cache-Control'
+          value: 'public, max-age=31536000, immutable'
+
+    - pattern: '**/*.jpg'
+      headers:
+        - key: 'Cache-Control'
+          value: 'public, max-age=31536000, immutable'
+
+    - pattern: '**/*.svg'
       headers:
         - key: 'Cache-Control'
           value: 'public, max-age=31536000, immutable'
@@ -125,9 +160,16 @@ frontend:
         - key: 'Permissions-Policy'
           value: 'camera=(), microphone=(), geolocation=()'
 
+        - key: 'Cross-Origin-Opener-Policy'
+          value: 'same-origin'
+
+        - key: 'Cross-Origin-Resource-Policy'
+          value: 'same-origin'
+
   environment:
     variables:
       CI: 'true'
       NODE_ENV: 'production'
       NG_CLI_ANALYTICS: 'false'
       AMPLIFY_DIFF_DEPLOY: 'false'
+      NODE_OPTIONS: '--max-old-space-size=6144'
