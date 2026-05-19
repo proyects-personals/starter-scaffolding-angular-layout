@@ -24,8 +24,7 @@ export class GetUserInteractor implements IGetUserInteractor {
    */
   public getCurrentUser(): Observable<UserModel | undefined> {
     return this.useCase.execute().pipe(
-      catchError((error: unknown) => {
-        console.error('Error getting user', error);
+      catchError(() => {
         return of(undefined);
       }),
     );

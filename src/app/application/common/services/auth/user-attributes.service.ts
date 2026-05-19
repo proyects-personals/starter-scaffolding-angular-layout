@@ -1,6 +1,7 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import type { FetchUserAttributesOutput } from 'aws-amplify/auth';
 import { fetchUserAttributes } from 'aws-amplify/auth';
+import { LoadingService } from '../loading';
 
 /**
  * Servicio encargado de gestionar los atributos del usuario autenticado
@@ -17,6 +18,8 @@ import { fetchUserAttributes } from 'aws-amplify/auth';
   providedIn: 'root',
 })
 export class UserAttributesService {
+  readonly #loadingService = inject(LoadingService);
+
   readonly #attributes = signal<FetchUserAttributesOutput | null>(null);
   readonly #loading = signal<boolean>(false);
   readonly #error = signal<string | null>(null);
@@ -52,18 +55,22 @@ export class UserAttributesService {
    */
   public async loadUserAttributes(): Promise<void> {
     this.#loading.set(true);
+    this.#loadingService.show();
+
     this.#error.set(null);
 
     try {
       const attrs = await fetchUserAttributes();
-      console.log('ver atributos:', attrs);
+
       this.#attributes.set(attrs);
     } catch (error: unknown) {
       this.#error.set(
         error instanceof Error ? error.message : 'Error obteniendo atributos del usuario',
       );
+
       this.#attributes.set(null);
     } finally {
+      this.#loadingService.hide();
       this.#loading.set(false);
     }
   }

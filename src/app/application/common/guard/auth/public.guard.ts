@@ -21,7 +21,6 @@ export const publicGuard: CanActivateFn = async () => {
   const auth = inject(AuthService);
 
   await auth.sync();
-  console.log('publicGuard: isAuthenticated =', auth.isAuthenticated());
 
   return auth.isAuthenticated() ? router.createUrlTree(['/home']) : true;
 };

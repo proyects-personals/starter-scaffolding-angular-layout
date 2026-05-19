@@ -1,66 +1,68 @@
-<footer
-  class="w-full py-10 px-4 mt-auto bg-surface-0 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-700"
->
-  <div class="mx-auto grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-    <div class="flex flex-col gap-4">
-      <span class="text-xl font-bold tracking-tight text-primary">
-        SteveenCues
-        <span class="text-muted-color font-light">Insights</span>
-      </span>
+@if (!user()) {
+  <footer
+    class="w-full py-10 px-4 mt-auto bg-surface-0 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-700"
+  >
+    <div class="mx-auto grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="flex flex-col gap-4">
+        <span class="text-xl font-bold tracking-tight text-primary">
+          SteveenCues
+          <span class="text-muted-color font-light">Insights</span>
+        </span>
 
-      <p class="text-sm text-muted-color leading-relaxed max-w-xs">
-        Soluciones de software de alto rendimiento con arquitectura hexagonal y tecnologías
-        modernas.
-      </p>
-    </div>
+        <p class="text-sm text-muted-color leading-relaxed max-w-xs">
+          Soluciones de software de alto rendimiento con arquitectura hexagonal y tecnologías
+          modernas.
+        </p>
+      </div>
 
-    <div class="flex flex-col gap-3">
-      <span class="font-semibold text-surface-900 dark:text-white"> Legal </span>
+      <div class="flex flex-col gap-3">
+        <span class="font-semibold text-surface-900 dark:text-white"> Legal </span>
 
-      <a
-        [href]="urls.TERMS_AND_CONDITIONS"
-        target="_blank"
-        class="text-sm text-muted-color hover:text-primary transition"
-      >
-        Términos y Condiciones
-      </a>
+        <a
+          [href]="urls.TERMS_AND_CONDITIONS"
+          target="_blank"
+          class="text-sm text-muted-color hover:text-primary transition"
+        >
+          Términos y Condiciones
+        </a>
 
-      <a
-        [href]="urls.TERMS_AND_CONDITIONS"
-        target="_blank"
-        class="text-sm text-muted-color hover:text-primary transition"
-      >
-        Política de Privacidad
-      </a>
-    </div>
+        <a
+          [href]="urls.TERMS_AND_CONDITIONS"
+          target="_blank"
+          class="text-sm text-muted-color hover:text-primary transition"
+        >
+          Política de Privacidad
+        </a>
+      </div>
 
-    <div class="flex flex-col gap-4 lg:items-end">
-      <span class="font-semibold text-surface-900 dark:text-white"> Conecta </span>
+      <div class="flex flex-col gap-4 lg:items-end">
+        <span class="font-semibold text-surface-900 dark:text-white"> Conecta </span>
 
-      <div class="flex gap-2">
-        @for (social of socialMedia; track social.label) {
-          <p-button
-            [icon]="social.icon"
-            [rounded]="true"
-            [text]="true"
-            severity="secondary"
-            (onClick)="navigateTo(social.url)"
-          />
-        }
+        <div class="flex gap-2">
+          @for (social of socialMedia; track social.label) {
+            <p-button
+              [icon]="social.icon"
+              [rounded]="true"
+              [text]="true"
+              severity="secondary"
+              (onClick)="navigateTo(social.url)"
+            />
+          }
+        </div>
       </div>
     </div>
-  </div>
 
-  <p-divider class="my-8" />
+    <p-divider class="my-8" />
 
-  <div
-    class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-color"
-  >
-    <p>© {{ currentYear }} SteveenCues Insights. Todos los derechos reservados.</p>
+    <div
+      class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-color"
+    >
+      <p>© {{ currentYear }} SteveenCues Insights. Todos los derechos reservados.</p>
 
-    <div class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-      <span>Servicios activos en Quito, Ecuador</span>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        <span>Servicios activos en Quito, Ecuador</span>
+      </div>
     </div>
-  </div>
-</footer>
+  </footer>
+}

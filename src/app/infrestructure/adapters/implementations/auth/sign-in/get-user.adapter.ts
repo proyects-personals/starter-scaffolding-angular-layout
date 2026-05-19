@@ -34,8 +34,7 @@ export class GetUserAdapter implements IGetUserAdapter {
             userAttributes.sub ?? '',
           ),
       ),
-      catchError((error) => {
-        console.error('Error fetching user attributes', error);
+      catchError(() => {
         return of(undefined);
       }),
     );

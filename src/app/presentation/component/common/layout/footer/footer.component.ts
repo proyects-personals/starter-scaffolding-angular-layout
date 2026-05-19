@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UrlEnum } from '@/app/domain';
 import { Divider } from 'primeng/divider';
 import { Button } from 'primeng/button';
+import { UserAttributesService } from '@/app/application';
 
 /**
  * @interface SocialNetwork
@@ -42,6 +43,18 @@ export class FooterComponent {
    * @description Referencia al enumerado de URLs globales para uso en el template.
    */
   public readonly urls: typeof UrlEnum = UrlEnum;
+
+  /**
+   * @private userService
+   * @description Servicio de atributos del usuario
+   */
+  private readonly userService = inject(UserAttributesService);
+
+  /**
+   * @signal user
+   * @description Atributos del usuario autenticado
+   */
+  public readonly user = this.userService.attributes;
 
   /**
    * @readonly

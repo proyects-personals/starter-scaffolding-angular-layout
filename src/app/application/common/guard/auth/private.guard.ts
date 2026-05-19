@@ -18,7 +18,5 @@ export const privateGuard: CanActivateFn = async () => {
 
   await auth.sync();
 
-  console.log('privateGuard: isAuthenticated =', auth.isAuthenticated());
-
   return auth.isAuthenticated() ? true : router.createUrlTree(['/onboarding/auth/sign-in']);
 };

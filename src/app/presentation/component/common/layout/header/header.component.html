@@ -1,54 +1,95 @@
-<header
-  class="sticky top-0 z-50 w-full border-b border-surface-200 dark:border-surface-700 bg-surface-0/80 dark:bg-surface-900/80 backdrop-blur-md"
->
-  <div class="mx-auto px-4 py-2 grid grid-cols-[auto_1fr_auto] items-center gap-4">
-    <!-- 🔹 Logo -->
-    <div class="flex items-center gap-3">
-      <a routerLink="/" class="flex items-center gap-2">
-        <span class="text-xl font-extrabold tracking-tighter text-surface-950 dark:text-white">
-          STEVEENCUES
-        </span>
-
-        <span
-          class="hidden sm:inline-flex text-primary text-xs font-semibold uppercase bg-primary/10 px-2 py-0.5 rounded-full"
-        >
-          Insights
-        </span>
-      </a>
-    </div>
-
-    <!-- 🔹 Menú -->
-    <nav class="hidden lg:flex justify-center">
-      <p-menubar [model]="items" />
-    </nav>
-
-    <!-- 🔹 Usuario / Auth -->
-    <div class="flex justify-end items-center gap-3">
-      @if (isAuthenticated()) {
-        <div class="flex items-center gap-3 animate-fade-in">
+<header class="top-0 z-50 w-full">
+  <div class="mx-auto max-w-7xl">
+    <p-megamenu
+      [model]="!isAuthenticated() ? items : []"
+      styleClass="border border-surface-200/70 dark:border-surface-800/70 bg-surface-0/80 dark:bg-surface-900/80 shadow-xl shadow-surface-200/20 dark:shadow-black/10 px-4 py-3"
+    >
+      <ng-template #start>
+        <a routerLink="/" class="flex items-center gap-3 no-underline group">
           <div
-            class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold"
+            class="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-primary text-white font-black shadow-lg shadow-primary/30 transition-all duration-300 group-hover:scale-105"
           >
-            {{ email()?.charAt(0)?.toUpperCase() }}
+            <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+
+            <span class="relative text-lg">S</span>
           </div>
-          <div class="hidden sm:flex flex-col leading-tight">
-            <span class="text-sm font-medium text-surface-900 dark:text-white">
-              {{ email() }}
+
+          <div class="flex flex-col leading-none">
+            <span class="text-lg font-black tracking-tight text-surface-950 dark:text-surface-0">
+              STEVEENCUES
             </span>
-            <span class="text-xs text-surface-500"> Usuario autenticado </span>
+
+            <span class="mt-1 text-[10px] uppercase tracking-[0.35em] text-primary font-bold">
+              Insights
+            </span>
           </div>
-          <p-button icon="pi pi-home" [text]="true" size="small" (onClick)="goToHome()" />
+        </a>
+      </ng-template>
+
+      <ng-template pTemplate="item" let-item>
+        <a
+          pRipple
+          [routerLink]="item.routerLink"
+          class="flex items-center gap-3 px-5 py-3 cursor-pointer transition-all duration-200 rounded-2xl text-surface-700 dark:text-surface-200 hover:bg-primary hover:text-white"
+        >
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+            <i [class]="item.icon + ' text-base'"></i>
+          </div>
+
+          <span class="font-semibold text-sm tracking-wide">
+            {{ item.label }}
+          </span>
+        </a>
+      </ng-template>
+
+      <ng-template #end>
+        <div class="flex items-center gap-3">
+          @if (isAuthenticated()) {
+            <div
+              class="flex items-center gap-3 rounded-2xl border border-surface-200 dark:border-surface-800 bg-surface-50/70 dark:bg-surface-950/70 px-3 py-2"
+            >
+              <div class="hidden md:flex flex-col text-right leading-tight">
+                <span
+                  class="max-w-[160px] truncate text-sm font-semibold text-surface-900 dark:text-surface-0"
+                >
+                  {{ email() }}
+                </span>
+
+                <span class="text-[11px] font-medium text-surface-500 dark:text-surface-400">
+                  Developer
+                </span>
+              </div>
+
+              <div
+                class="relative flex h-11 w-11 items-center justify-center rounded-full bg-primary text-sm font-bold text-white shadow-lg shadow-primary/25"
+              >
+                <div class="absolute inset-0 rounded-full ring-4 ring-primary/15"></div>
+
+                <span class="relative">
+                  {{ email()?.charAt(0)?.toUpperCase() }}
+                </span>
+              </div>
+
+              <p-button
+                icon="pi pi-home"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                styleClass="w-10 h-10"
+                (onClick)="goToHome()"
+              />
+            </div>
+          } @else {
+            <p-button
+              label="Sign in"
+              icon="pi pi-sign-in"
+              severity="primary"
+              styleClass="rounded-2xl px-5 py-2 font-semibold shadow-lg shadow-primary/20"
+              (onClick)="goToLogin()"
+            />
+          }
         </div>
-      } @else {
-        <p-button
-          label="Sign in"
-          icon="pi pi-sign-in"
-          [text]="true"
-          size="small"
-          (onClick)="goToLogin()"
-          class="animate-fade-in"
-        />
-      }
-    </div>
+      </ng-template>
+    </p-megamenu>
   </div>
 </header>

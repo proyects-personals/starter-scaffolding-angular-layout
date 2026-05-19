@@ -3,11 +3,14 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
-import type { MenuItem } from 'primeng/api';
-import { Menubar } from 'primeng/menubar';
-import { Button } from 'primeng/button';
+
+import { ButtonModule } from 'primeng/button';
 import { APP_ROUTES } from '@/app/domain';
 import { UserAttributesService } from '@/app/application';
+import { AvatarModule } from 'primeng/avatar';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { RippleModule } from 'primeng/ripple';
+import type { MegaMenuItem } from 'primeng/api';
 
 /**
  * @component HeaderComponent
@@ -24,8 +27,15 @@ import { UserAttributesService } from '@/app/application';
  */
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [Menubar, Button, RouterLink],
+  imports: [
+    RouterLink,
+    ButtonModule,
+    RouterLink,
+    AvatarModule,
+    ButtonModule,
+    MegaMenuModule,
+    RippleModule,
+  ],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit {
@@ -69,7 +79,7 @@ export class HeaderComponent implements OnInit {
    * @property items
    * @description Items del menú principal
    */
-  public items: MenuItem[] = [];
+  public items: MegaMenuItem[] = [];
 
   /**
    * @constructor
@@ -95,17 +105,52 @@ export class HeaderComponent implements OnInit {
    */
   #initMenu(): void {
     this.items = [
-      { label: 'Inicio', icon: 'pi pi-home', routerLink: '/' },
-      { label: 'Proyectos', icon: 'pi pi-briefcase' },
-      { label: 'Contacto', icon: 'pi pi-envelope' },
+      {
+        label: 'Inicio',
+        icon: 'pi pi-home',
+        routerLink: '/',
+      },
+      {
+        label: 'Proyectos',
+        icon: 'pi pi-briefcase',
+        items: [
+          [
+            {
+              label: 'Frontend',
+              items: [
+                {
+                  label: 'Angular',
+                  icon: 'pi pi-code',
+                },
+                {
+                  label: 'Tailwind',
+                  icon: 'pi pi-palette',
+                },
+              ],
+            },
+          ],
+        ],
+      },
+      {
+        label: 'Contacto',
+        icon: 'pi pi-envelope',
+        items: [
+          [
+            {
+              label: 'Redes',
+              items: [
+                {
+                  label: 'GitHub',
+                  icon: 'pi pi-github',
+                },
+              ],
+            },
+          ],
+        ],
+      },
     ];
   }
 
-  /**
-   * @method #listenRouteChanges
-   * @description Escucha cambios de navegación para detectar login
-   * @private
-   */
   #listenRouteChanges(): void {
     this.router.events
       .pipe(
