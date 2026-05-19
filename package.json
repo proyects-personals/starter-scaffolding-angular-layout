@@ -1,17 +1,17 @@
 {
- "name": "starter-scaffolding-angular",
+  "name": "starter-scaffolding-angular",
   "version": "0.0.0",
   "type": "module",
   "private": true,
   "packageManager": "npm@11.10.1",
   "engines": {
-    "node": "20"
+    "node": ">=22"
   },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development", 
+    "watch": "ng build --watch --configuration development",
     "prepare": "husky install",
     "commitlint": "commitlint --from=HEAD~1",
     "lint": "ng lint",
