@@ -6,8 +6,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
 import { Amplify } from 'aws-amplify';
-import { parseAmplifyConfig } from 'aws-amplify/utils';
-import amplifyconfig from '../../amplifyconfiguration.json';
+import outputs from '../../../amplify_outputs.json';
 import { DataIoc } from '../infrestructure/data-ioc';
 
 /**
@@ -25,8 +24,7 @@ function initializeTheme(): void {
   darkQuery.addEventListener('change', (e) => updateTheme(e.matches));
 }
 
-const resourceConfig = parseAmplifyConfig(amplifyconfig);
-Amplify.configure(resourceConfig);
+Amplify.configure(outputs);
 
 /**
  * @constant appConfig
