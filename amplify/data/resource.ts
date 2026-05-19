@@ -115,7 +115,7 @@ const schema = a.schema({
       createdBy: a.string(),
       updatedBy: a.string(),
       site: a.belongsTo('Site', 'siteId'),
-      sections: a.hasMany('Section', 'pageId'),
+      sections: a.hasMany('Section', ['pageSiteId', 'pageSlug']),
     })
     .identifier(['siteId', 'slug'])
     .secondaryIndexes((index) => [
@@ -133,7 +133,8 @@ const schema = a.schema({
   ========================================================================= */
   Section: a
     .model({
-      pageId: a.id().required(),
+      pageSiteId: a.id().required(),
+      pageSlug: a.string().required(),
       code: a.string(),
       name: a.string().required(),
       sectionType: a.string().required(),
@@ -142,11 +143,12 @@ const schema = a.schema({
       settingsJson: a.json(),
       createdBy: a.string(),
       updatedBy: a.string(),
-      page: a.belongsTo('Page', 'pageId'),
+      page: a.belongsTo('Page', ['pageSiteId', 'pageSlug']),
       blocks: a.hasMany('Block', 'sectionId'),
     })
     .secondaryIndexes((index) => [
-      index('pageId'),
+      index('pageSiteId'),
+      index('pageSlug'),
       index('sectionType'),
     ])
     .authorization((allow) => [
