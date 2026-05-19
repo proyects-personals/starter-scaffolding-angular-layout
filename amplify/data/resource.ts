@@ -102,7 +102,7 @@ const schema = a.schema({
       name: a.string().required(),
       slug: a.string().required(),
       pageType: a.string(),
-      isHome: a.boolean().default(false),
+      isHome: a.string().default('false'), 
       seoTitle: a.string(),
       seoDescription: a.string(),
       seoKeywords: a.string().array(),
