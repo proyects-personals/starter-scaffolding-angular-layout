@@ -4,20 +4,15 @@ backend:
   phases:
     preBuild:
       commands:
-        - echo "=== BACKEND PIPELINE ==="
         - node -v
         - npm -v
-
         - npm config set fund false
         - npm config set audit false
         - npm config set progress false
-
-        - npm ci --legacy-peer-deps --cache .npm --prefer-offline --no-audit --no-fund
+        - npm install --legacy-peer-deps --cache .npm --prefer-offline --no-audit --no-fund
 
     build:
       commands:
-        - echo "Deploying backend..."
-
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 
   cache:
@@ -26,19 +21,15 @@ backend:
       - node_modules/**/*
       - .amplify/**/*
 
-
 frontend:
   phases:
     preBuild:
       commands:
-        - echo "=== FRONTEND PIPELINE ==="
         - node -v
         - npm -v
-
         - npm config set fund false
         - npm config set audit false
-
-        - npm ci --legacy-peer-deps --cache .npm --prefer-offline --no-audit --no-fund
+        - npm install --legacy-peer-deps --cache .npm --prefer-offline --no-audit --no-fund
 
     build:
       commands:
@@ -50,7 +41,7 @@ frontend:
   artifacts:
     baseDirectory: dist/starter-scaffolding-angular/browser
     files:
-      - '**/*'
+      - "**/*"
 
   cache:
     paths:
@@ -60,7 +51,7 @@ frontend:
 
   environment:
     variables:
-      CI: 'true'
-      NODE_ENV: 'production'
-      NG_CLI_ANALYTICS: 'false'
-      NODE_OPTIONS: '--max-old-space-size=6144'
+      CI: "true"
+      NODE_ENV: "production"
+      NG_CLI_ANALYTICS: "false"
+      NODE_OPTIONS: "--max-old-space-size=6144"
