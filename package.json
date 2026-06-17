@@ -39,7 +39,10 @@
     "tslib": "^2.3.0",
     "zone.js": "^0.16.1",
     "@aws-amplify/backend": "^1.22.0",
-    "@aws-amplify/backend-cli": "^1.8.2"
+    "@aws-amplify/backend-cli": "^1.8.2",
+     "aws-cdk-lib": "^2.234.1",
+    "constructs": "^10.6.0",
+    "esbuild": "^0.28.0"
   },
   "devDependencies": {
     "@analogjs/platform": "^2.3.1",
@@ -53,7 +56,6 @@
     "@tailwindcss/vite": "^4.2.2",
     "@types/jest": "^30.0.0",
     "angular-eslint": "21.3.1",
-    "aws-cdk-lib": "^2.234.1",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
