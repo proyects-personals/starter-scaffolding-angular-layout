@@ -2,11 +2,10 @@
   <footer
     class="w-full py-10 px-4 mt-auto bg-surface-0 dark:bg-surface-900 border-t border-surface-200 dark:border-surface-700"
   >
-    <div class="mx-auto grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mx-auto max-w-7xl grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
       <div class="flex flex-col gap-4">
-        <span class="text-xl font-bold tracking-tight text-primary">
-          SteveenCues
-          <span class="text-muted-color font-light">Insights</span>
+        <span class="text-xl font-black tracking-tight text-neutral-900 dark:text-white">
+          CARYAN<span class="text-neutral-400 font-light dark:text-neutral-500">.insights</span>
         </span>
 
         <p class="text-sm text-muted-color leading-relaxed max-w-xs">
@@ -21,7 +20,7 @@
         <a
           [href]="urls.TERMS_AND_CONDITIONS"
           target="_blank"
-          class="text-sm text-muted-color hover:text-primary transition"
+          class="text-sm text-muted-color hover:text-primary transition no-underline"
         >
           Términos y Condiciones
         </a>
@@ -29,14 +28,14 @@
         <a
           [href]="urls.TERMS_AND_CONDITIONS"
           target="_blank"
-          class="text-sm text-muted-color hover:text-primary transition"
+          class="text-sm text-muted-color hover:text-primary transition no-underline"
         >
           Política de Privacidad
         </a>
       </div>
 
       <div class="flex flex-col gap-4 lg:items-end">
-        <span class="font-semibold text-surface-900 dark:text-white"> Conecta </span>
+        <span class="font-semibold text-surface-900 dark:text-white lg:pr-2"> Conecta </span>
 
         <div class="flex gap-2">
           @for (social of socialMedia; track social.label) {
@@ -45,6 +44,7 @@
               [rounded]="true"
               [text]="true"
               severity="secondary"
+              styleClass="hover:!bg-neutral-100 dark:hover:!bg-neutral-800 transition-colors"
               (onClick)="navigateTo(social.url)"
             />
           }
@@ -52,15 +52,22 @@
       </div>
     </div>
 
-    <p-divider class="my-8" />
+    <div class="max-w-7xl mx-auto">
+      <p-divider class="my-8" />
+    </div>
 
     <div
       class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-muted-color"
     >
-      <p>© {{ currentYear }} SteveenCues Insights. Todos los derechos reservados.</p>
+      <p>© {{ currentYear }} CARYAN Insights. Todos los derechos reservados.</p>
 
-      <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      <div class="flex items-center gap-2 select-none">
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
+          ></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
         <span>Servicios activos en Quito, Ecuador</span>
       </div>
     </div>

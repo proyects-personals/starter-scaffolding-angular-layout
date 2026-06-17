@@ -11,6 +11,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { RippleModule } from 'primeng/ripple';
 import type { MegaMenuItem } from 'primeng/api';
+import { Menubar } from 'primeng/menubar';
 
 /**
  * @component HeaderComponent
