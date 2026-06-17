@@ -40,8 +40,6 @@
     "zone.js": "^0.16.1",
     "@aws-amplify/backend": "^1.22.0",
     "@aws-amplify/backend-cli": "^1.8.2",
-     "aws-cdk-lib": "^2.234.1",
-    "constructs": "^10.6.0",
     "esbuild": "^0.28.0"
   },
   "devDependencies": {
@@ -50,6 +48,8 @@
     "@angular/build": "21.2.3",
     "@angular/cli": "21.2.3",
     "@angular/compiler-cli": "21.2.17",
+    "aws-cdk-lib": "^2.234.1",
+    "constructs": "^10.6.0",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
