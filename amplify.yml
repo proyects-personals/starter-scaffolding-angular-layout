@@ -10,6 +10,7 @@ backend:
         - npm config set audit false
         - npm config set progress false
         - npm install --legacy-peer-deps --cache .npm --prefer-offline --no-audit --no-fund
+        - npm install -g esbuild@0.28.0
     build:
       commands:
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
@@ -30,7 +31,6 @@ frontend:
         - npm config set audit false
         - npm config set progress false
         - npm install --no-save --ignore-scripts --cache .npm --prefer-offline --no-audit --no-fund
-        - npm install -g esbuild@0.28.0
     build:
       commands:
         - npm run lint
